@@ -29,6 +29,7 @@
         <intercept-url pattern="/secure/**" access="isFullyAuthenticated()"/>
         <intercept-url pattern="/register" access="permitAll"/>
         <intercept-url pattern="/login/" access="permitAll"/>
+        <intercept-url pattern="/logout/" access="isFullyAuthenticated()"/>
         <intercept-url pattern="/*" access="permitAll"/>
     </http>
 

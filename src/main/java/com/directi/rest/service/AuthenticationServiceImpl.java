@@ -54,8 +54,11 @@ public class AuthenticationServiceImpl implements AuthenticationService {
 
 			if (authentication.getPrincipal() != null) {
 				UserDetails userContext = (UserDetails) authentication.getPrincipal();
-                Token token = new Token(TokenUtil.CreateTokenFromEmail(userContext.getUsername()),userContext.getUsername());
-                tokenDao.AddToken(token);
+				Token token = tokenDao.getTokenByEmail(login);
+				if (token != null)
+					return token;
+                token = new Token(TokenUtil.CreateTokenFromEmail(userContext.getUsername()),userContext.getUsername());
+                tokenDao.addToken(token);
 				if (token == null) {
 					return null;
 				}

@@ -16,7 +16,7 @@ public class TokenManager
         this.tokenDao = tokenDao;
     }
 
-    public AuthenticationUserToken GetAuthenticationToken(String email)
+    public AuthenticationUserToken getAuthenticationToken(String email)
     {
         Token token = tokenDao.getTokenByEmail(email);
         if (token == null)
@@ -25,5 +25,11 @@ public class TokenManager
         }
         AuthenticationUserToken authenticationUserToken = new AuthenticationUserToken(token.getEmail(), token.getToken());
         return authenticationUserToken;
+    }
+
+    public boolean deleteToken(String email)
+    {
+        boolean isTokenDeleted = tokenDao.deleteToken(email);
+        return isTokenDeleted;
     }
 }

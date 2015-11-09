@@ -16,8 +16,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import javax.servlet.http.HttpServletResponse;
-
 /**
  * Created by sarvendra.a on 11/5/2015.
  */
@@ -39,24 +37,42 @@ public class UserController extends BaseController
 
     @RequestMapping(value = "/register", method = RequestMethod.POST, consumes = "application/json")
     @ResponseBody
-    public ExternalUser registerUser(@RequestBody RegisterUserRequest user, HttpServletResponse response)
+    public ExternalUser registerUser(@RequestBody RegisterUserRequest user)
     {
         ExternalUser externalUser = userManager.RegisterUser(user);
         return externalUser;
     }
 
-    @RequestMapping(value = "/login", method = RequestMethod.POST)
+    @RequestMapping(value = "/login", method = RequestMethod.GET)
     @ResponseBody
     public AuthenticationUserToken login()
     {
-        System.out.println(" *** MainRestController.login");
-        Authentication authentication = (Authentication)SecurityContextHolder.getContext().getAuthentication();
+        System.out.println(" *** Controller.login");
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         UserDetails userDetails = (UserContext)authentication.getPrincipal();
         if (userDetails != null)
         {
-            AuthenticationUserToken authenticationUserToken = tokenManager.GetAuthenticationToken(userDetails.getUsername());
+            AuthenticationUserToken authenticationUserToken = tokenManager.getAuthenticationToken(userDetails.getUsername());
             return authenticationUserToken;
         }
-        return null;
+        return new AuthenticationUserToken("null", "null");
+    }
+
+    @RequestMapping(value = "/logout", method = RequestMethod.GET)
+    @ResponseBody
+    public String logout()
+    {
+        System.out.println(" *** Controller.logout");
+        String logoutMessage = "logout is unsuccessful";
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        UserDetails userDetails = (UserContext)authentication.getPrincipal();
+        if (userDetails != null)
+        {
+            if (tokenManager.deleteToken(userDetails.getUsername()))
+            {
+                logoutMessage = "logout is successful";
+            }
+        }
+        return logoutMessage;
     }
 }

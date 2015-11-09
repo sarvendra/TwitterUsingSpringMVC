@@ -9,7 +9,9 @@ public interface TokenDao
 {
     public Token getToken(String token);
 
-    public void AddToken(Token token);
+    public void addToken(Token token);
 
     public Token getTokenByEmail(String email);
+
+    boolean deleteToken(String email);
 }
