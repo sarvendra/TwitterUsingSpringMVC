@@ -34,8 +34,6 @@ public class UserController extends BaseController
     @ResponseBody
     public String defaultPage()
     {
-        RegisterUserRequest user = new RegisterUserRequest("sarvednra", "test", "test");
-        ExternalUser externalUser = userManager.RegisterUser(user);
         return "Twitter.com";
     }
 
