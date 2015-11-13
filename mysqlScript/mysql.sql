@@ -19,8 +19,15 @@ CREATE  TABLE Users (
 drop table if exists Tweets;
 CREATE  TABLE Tweets (
     tweetid VARCHAR(200) NOT NULL ,
-    userid VARCHAR(100) NOT NULL ,
+    userid VARCHAR(200) NOT NULL ,
     message VARCHAR(500) NOT NULL ,
     PRIMARY KEY (tweetid)
+    );
+
+drop table if exists Followers;
+CREATE  TABLE Followers (
+    userid VARCHAR(200) NOT NULL ,
+    followerid VARCHAR(200) NOT NULL ,
+    PRIMARY KEY (userid, followerid)
     );
 	
