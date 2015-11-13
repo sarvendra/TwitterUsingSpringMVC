@@ -8,11 +8,11 @@ import java.util.UUID;
 
 public class Tweet
 {
-    public String userid;
+    private String userid;
 
-    public String tweetid;
+    private String tweetid;
 
-    public String message;
+    private String message;
 
     public Tweet(){}
 

@@ -76,7 +76,8 @@ public class AuthenticationServiceImpl implements AuthenticationService {
 
 		if (validateUser(token))
 		{
-            String email = TokenUtil.parseEmailFromToken(token);
+            //String email = TokenUtil.parseEmailFromToken(token);
+			String email = tokenDao.getToken(token).getEmail();
             User user = userDao.getUserByEmail(email);
             if (user == null)
                 return false;
@@ -96,7 +97,8 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         {
             return false;
         }
-        String emailFromParser = TokenUtil.parseEmailFromToken(token);
-        return emailFromParser.equals(tokenObj.getEmail());
+//        String emailFromParser = TokenUtil.parseEmailFromToken(token);
+//        return emailFromParser.equals(tokenObj.getEmail());
+		return true;
     }
 }

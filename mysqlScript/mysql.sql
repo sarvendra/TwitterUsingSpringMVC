@@ -15,4 +15,12 @@ CREATE  TABLE Users (
     role VARCHAR(200) NOT NULL ,
     PRIMARY KEY (email)
     );
+
+drop table if exists Tweets;
+CREATE  TABLE Tweets (
+    tweetid VARCHAR(200) NOT NULL ,
+    userid VARCHAR(100) NOT NULL ,
+    message VARCHAR(500) NOT NULL ,
+    PRIMARY KEY (tweetid)
+    );
 	

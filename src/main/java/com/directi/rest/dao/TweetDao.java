@@ -11,5 +11,5 @@ public interface TweetDao
 {
     public List<Tweet> getTweetsByUserid(String userid);
 
-    public void postTweet(Tweet tweet);
+    public boolean postTweet(Tweet tweet);
 }

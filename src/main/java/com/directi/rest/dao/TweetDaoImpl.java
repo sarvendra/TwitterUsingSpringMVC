@@ -21,7 +21,7 @@ public class TweetDaoImpl implements TweetDao
     @Override
     public List<Tweet> getTweetsByUserid(String userid)
     {
-        String query = "select tweetid,userid,message from Tweets where userid=?" + userid;
+        String query = "select tweetid,userid,message from Tweets where userid='" + userid + "'";
         List<Tweet> tweets = null;
         try
         {
@@ -35,9 +35,19 @@ public class TweetDaoImpl implements TweetDao
     }
 
     @Override
-    public void postTweet(Tweet tweet)
+    public boolean postTweet(Tweet tweet)
     {
-        jdbcTemplate.update("INSERT INTO Tweets (tweetid,userid,message) VALUES (?, ?, ?)",
-                tweet.getTweetid(), tweet.getUserid(), tweet.getMessage());
+        boolean isTweetAdded = true;
+        try
+        {
+            jdbcTemplate.update("INSERT INTO Tweets (tweetid,userid,message) VALUES (?, ?, ?)",
+                    tweet.getTweetid(), tweet.getUserid(), tweet.getMessage());
+        }
+        catch (Exception exp)
+        {
+            isTweetAdded = false;
+            System.out.println("Exception: " + exp.getMessage());
+        }
+        return isTweetAdded;
     }
 }

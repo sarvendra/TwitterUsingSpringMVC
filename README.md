@@ -10,3 +10,13 @@ curl -X GET -H "X-Username: test@gmail.com" -H "X-Password: test" http://localho
 
 logout:
 curl -X GET -H "X-Auth-Token: authtoken" http://localhost:8080/logout
+
+posttweet:
+curl -X POST -H "X-Auth-Token: authtoken" -H "Content-Type: application/json" -d 
+"{\"message\":\"your message\"}" http://localhost:8080/posttweet
+
+tweets:
+curl -X GET -H "X-Auth-Token: authtoken" -H http://localhost:8080/tweets
+
+tweets by userid:
+curl -X GET -H "X-Auth-Token: authtoken" -H http://localhost:8080/tweets/{userid}

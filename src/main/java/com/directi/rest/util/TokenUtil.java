@@ -3,6 +3,8 @@ package com.directi.rest.util;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 
+import java.util.UUID;
+
 /**
  * Created by sarvendra.a on 11/6/2015.
  */
@@ -21,9 +23,10 @@ public class TokenUtil
 
     public static String CreateTokenFromEmail(String email)
     {
-        return Jwts.builder()
-                .setSubject(email)
-                .signWith(SignatureAlgorithm.HS512, secret)
-                .compact();
+//        return Jwts.builder()
+//                .setSubject(email)
+//                .signWith(SignatureAlgorithm.HS512, secret)
+//                .compact();
+        return UUID.randomUUID().toString();
     }
 }

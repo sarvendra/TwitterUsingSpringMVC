@@ -25,6 +25,11 @@ public class UserContext implements UserDetails
 		return authorities;
 	}
 
+    public String getUserid()
+    {
+        return user.getUserid();
+    }
+
 	@Override
 	public String getPassword() {
 		return user.getPassword();
