@@ -42,7 +42,7 @@ public class FollowerDaoImpl implements FollowerDao
         List<Follower> followers = null;
         try
         {
-            followers = jdbcTemplate.query(query, new BeanPropertyRowMapper(Tweet.class));
+            followers = jdbcTemplate.query(query, new BeanPropertyRowMapper(Follower.class));
         }
         catch (Exception exp)
         {

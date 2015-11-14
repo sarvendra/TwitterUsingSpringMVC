@@ -31,6 +31,9 @@
         <intercept-url pattern="/logout/" access="isFullyAuthenticated()"/>
         <intercept-url pattern="/posttweet/" access="isFullyAuthenticated()"/>
         <intercept-url pattern="/tweets/**" access="isFullyAuthenticated()"/>
+        <intercept-url pattern="/followers/**" access="isFullyAuthenticated()"/>
+        <intercept-url pattern="/following/**" access="isFullyAuthenticated()"/>
+        <intercept-url pattern="/addfollowing/**" access="isFullyAuthenticated()"/>
         <intercept-url pattern="/*" access="permitAll"/>
     </http>
 
@@ -56,6 +59,8 @@
             c:jdbcTemplate-ref="jdbcTemplate"/>
     <bean:bean id="tweetDao" class="com.directi.rest.dao.TweetDaoImpl"
                c:jdbcTemplate-ref="jdbcTemplate"/>
+    <bean:bean id="followerDao" class="com.directi.rest.dao.FollowerDaoImpl"
+               c:jdbcTemplate-ref="jdbcTemplate"/>
 
     <!-- Create manager beans-->
     <bean:bean id="tokenManager" class="com.directi.rest.service.TokenManager"
@@ -64,6 +69,8 @@
             c:userDao-ref="userDao"/>
     <bean:bean id="tweetManager" class="com.directi.rest.service.TweetManager"
                c:tweetDao-ref="tweetDao"/>
+    <bean:bean id="followerManager" class="com.directi.rest.service.FollowerManager"
+               c:followerDao-ref="followerDao"/>
 
     <bean:bean id="authenticationService" class="com.directi.rest.service.AuthenticationServiceImpl"
                c:authenticationManager-ref="restAuthenticationManager" c:tokenDao-ref="tokenDao"
