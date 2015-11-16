@@ -22,4 +22,17 @@ tweets by userid:
 curl -X GET -H "X-Auth-Token: authtoken"  http://localhost:8080/tweets/{userid}
 
 addFollowing:
-curl -X GET -H "X-Auth-Token: authtoken" 
+curl -X GET -H "X-Auth-Token: authtoken" http://localhost:8080/addfollowing/{followingid}
+
+get followers:
+curl -X GET -H "X-Auth-Token: authtoken" http://localhost:8080/followers
+
+get followers by userid:
+curl -X GET -H "X-Auth-Token: authtoken" http://localhost:8080/followers/{userid}
+
+get following:
+curl -X GET -H "X-Auth-Token: authtoken" http://localhost:8080/following
+
+get following list by userid:
+curl -X GET -H "X-Auth-Token: authtoken" http://localhost:8080/following/{userid}
+
