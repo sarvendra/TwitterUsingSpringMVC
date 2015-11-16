@@ -5,6 +5,8 @@ import com.directi.rest.apimodel.Tweets;
 import com.directi.rest.apimodel.UserContext;
 import com.directi.rest.service.TweetManager;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
@@ -22,31 +24,27 @@ public class TweetController extends BaseController
 
     @RequestMapping(value = "/tweets", method = RequestMethod.GET)
     @ResponseBody
-    public Tweets getTweets()
+    public ResponseEntity<Tweets> getTweets()
     {
         System.out.println(" *** Controller.getTweets");
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         UserContext user = (UserContext)authentication.getPrincipal();
-        Tweets tweets = null;
-        if (user != null)
-        {
-            tweets = tweetManager.getTweetsByUserid(user.getUserid());
-        }
-        return tweets;
+        Tweets tweets = tweetManager.getTweetsByUserid(user.getUserid());
+        return new ResponseEntity<>(tweets, HttpStatus.OK);
     }
 
     @RequestMapping(value = "/tweets/{userid}", method = RequestMethod.GET)
     @ResponseBody
-    public Tweets getTweetsByUserid(@PathVariable String userid)
+    public ResponseEntity<Tweets> getTweetsByUserid(@PathVariable String userid)
     {
         System.out.println(" *** Controller.getTweetsByUserid");
         Tweets tweets = tweetManager.getTweetsByUserid(userid);
-        return tweets;
+        return new ResponseEntity<>(tweets, HttpStatus.OK);
     }
 
     @RequestMapping(value = "/posttweet", method = RequestMethod.POST, consumes = "application/json")
     @ResponseBody
-    public String postTweet(@RequestBody PostTweetRequest tweetRequest)
+    public ResponseEntity<String> postTweet(@RequestBody PostTweetRequest tweetRequest)
     {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         UserContext user = (UserContext)authentication.getPrincipal();
@@ -55,7 +53,11 @@ public class TweetController extends BaseController
         if (isTweetAdded)
         {
             message = "tweet posted";
+            return new ResponseEntity<>(message, HttpStatus.OK);
         }
-        return message;
+        else
+        {
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
 }

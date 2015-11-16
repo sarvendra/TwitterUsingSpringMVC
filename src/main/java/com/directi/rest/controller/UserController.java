@@ -8,6 +8,8 @@ import com.directi.rest.service.FollowerManager;
 import com.directi.rest.service.TokenManager;
 import com.directi.rest.service.UserManager;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -32,22 +34,22 @@ public class UserController extends BaseController
 
     @RequestMapping(value = { "/", "/welcome**" }, method = RequestMethod.GET)
     @ResponseBody
-    public String defaultPage()
+    public ResponseEntity<String> defaultPage()
     {
-        return "Twitter.com";
+        return new ResponseEntity<>("Twitter.com", HttpStatus.OK);
     }
 
     @RequestMapping(value = "/register", method = RequestMethod.POST, consumes = "application/json")
     @ResponseBody
-    public ExternalUser registerUser(@RequestBody RegisterUserRequest user)
+    public ResponseEntity<ExternalUser> registerUser(@RequestBody RegisterUserRequest user)
     {
         ExternalUser externalUser = userManager.RegisterUser(user);
-        return externalUser;
+        return new ResponseEntity<>(externalUser, HttpStatus.OK);
     }
 
     @RequestMapping(value = "/login", method = RequestMethod.GET)
     @ResponseBody
-    public AuthenticationUserToken login()
+    public ResponseEntity<AuthenticationUserToken> login()
     {
         System.out.println(" *** Controller.login");
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -55,80 +57,73 @@ public class UserController extends BaseController
         if (userDetails != null)
         {
             AuthenticationUserToken authenticationUserToken = tokenManager.getAuthenticationToken(userDetails.getUsername());
-            return authenticationUserToken;
+            return new ResponseEntity<>(authenticationUserToken, HttpStatus.OK);
         }
-        return new AuthenticationUserToken("null", "null");
+        return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
     }
 
     @RequestMapping(value = "/logout", method = RequestMethod.GET)
     @ResponseBody
-    public String logout()
+    public ResponseEntity<String> logout()
     {
         System.out.println(" *** Controller.logout");
         String logoutMessage = "logout is unsuccessful";
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         UserDetails userDetails = (UserContext)authentication.getPrincipal();
-        if (userDetails != null)
+        if (tokenManager.deleteToken(userDetails.getUsername()))
         {
-            if (tokenManager.deleteToken(userDetails.getUsername()))
-            {
-                logoutMessage = "logout is successful";
-            }
+            logoutMessage = "logout is successful";
+            return new ResponseEntity<>(logoutMessage, HttpStatus.OK);
         }
-        return logoutMessage;
+        else
+        {
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
 
     @RequestMapping(value = "/followers", method = RequestMethod.GET)
     @ResponseBody
-    public ArrayList<String> getFollowers()
+    public ResponseEntity<ArrayList<String>> getFollowers()
     {
         System.out.println(" *** Controller.getFollowers");
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         UserContext user = (UserContext)authentication.getPrincipal();
-        ArrayList<String> followers = null;
-        if (user != null)
-        {
-            followers = followerManager.getFollowers(user.getUserid());
-        }
-        return followers;
+        ArrayList<String> followers = followerManager.getFollowers(user.getUserid());
+        return new ResponseEntity<>(followers, HttpStatus.OK);
     }
 
     @RequestMapping(value = "/followers/{userid}", method = RequestMethod.GET)
     @ResponseBody
-    public ArrayList<String> getFollowersByUserid(@PathVariable String userid)
+    public ResponseEntity<ArrayList<String>> getFollowersByUserid(@PathVariable String userid)
     {
         System.out.println(" *** Controller.getFollowers");
         ArrayList<String> followers = followerManager.getFollowers(userid);
-        return followers;
+        return new ResponseEntity<>(followers, HttpStatus.OK);
     }
 
     @RequestMapping(value = "/following", method = RequestMethod.GET)
     @ResponseBody
-    public ArrayList<String> getFollowing()
+    public ResponseEntity<ArrayList<String>> getFollowing()
     {
         System.out.println(" *** Controller.getFollowing");
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         UserContext user = (UserContext)authentication.getPrincipal();
-        ArrayList<String> following = null;
-        if (user != null)
-        {
-            following = followerManager.getFollowing(user.getUserid());
-        }
-        return following;
+        ArrayList<String> following = followerManager.getFollowing(user.getUserid());
+        return new ResponseEntity<>(following, HttpStatus.OK);
     }
 
     @RequestMapping(value = "/following/{userid}", method = RequestMethod.GET)
     @ResponseBody
-    public ArrayList<String> getFollowingByUserid(@PathVariable String userid)
+    public ResponseEntity<ArrayList<String>> getFollowingByUserid(@PathVariable String userid)
     {
         System.out.println(" *** Controller.getFollowingByUserid");
         ArrayList<String> following = followerManager.getFollowing(userid);
-        return following;
+        return new ResponseEntity(following, HttpStatus.OK);
     }
 
     @RequestMapping(value = "/addfollowing/{followingid}", method = RequestMethod.GET)
     @ResponseBody
-    public String addFollowing(@PathVariable String followingid)
+    public ResponseEntity<String> addFollowing(@PathVariable String followingid)
     {
         System.out.println(" *** Controller.addFollowing");
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -137,7 +132,11 @@ public class UserController extends BaseController
         if (followerManager.addFollower(followingid, user.getUserid()))
         {
             message = user.getUserid() + " following " + followingid;
+            return new ResponseEntity<>(message, HttpStatus.OK);
         }
-        return message;
+        else
+        {
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
 }
