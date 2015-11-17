@@ -28,8 +28,8 @@
 
         <intercept-url pattern="/register" access="permitAll"/>
         <intercept-url pattern="/login/" access="permitAll"/>
-        <intercept-url pattern="/logout/" access="isFullyAuthenticated()"/>
-        <intercept-url pattern="/posttweet/" access="isFullyAuthenticated()"/>
+        <intercept-url pattern="/logout/**" access="isFullyAuthenticated()"/>
+        <intercept-url pattern="/posttweet/**" access="isFullyAuthenticated()"/>
         <intercept-url pattern="/tweets/**" access="isFullyAuthenticated()"/>
         <intercept-url pattern="/followers/**" access="isFullyAuthenticated()"/>
         <intercept-url pattern="/following/**" access="isFullyAuthenticated()"/>

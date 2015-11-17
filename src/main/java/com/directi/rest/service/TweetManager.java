@@ -19,10 +19,10 @@ public class TweetManager
         this.tweetDao = tweetDao;
     }
 
-    public boolean postTweet(String userid, String message)
+    public void postTweet(String userid, String message)
     {
         Tweet tweet = new Tweet(userid, message);
-        return tweetDao.postTweet(tweet);
+        tweetDao.postTweet(tweet);
     }
 
     public Tweets getTweetsByUserid(String userid)

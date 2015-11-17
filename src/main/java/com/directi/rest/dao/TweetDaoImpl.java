@@ -35,19 +35,9 @@ public class TweetDaoImpl implements TweetDao
     }
 
     @Override
-    public boolean postTweet(Tweet tweet)
+    public void postTweet(Tweet tweet)
     {
-        boolean isTweetAdded = true;
-        try
-        {
-            jdbcTemplate.update("INSERT INTO Tweets (tweetid,userid,message) VALUES (?, ?, ?)",
-                    tweet.getTweetid(), tweet.getUserid(), tweet.getMessage());
-        }
-        catch (Exception exp)
-        {
-            isTweetAdded = false;
-            System.out.println("Exception: " + exp.getMessage());
-        }
-        return isTweetAdded;
+        jdbcTemplate.update("INSERT INTO Tweets (tweetid,userid,message) VALUES (?, ?, ?)",
+                tweet.getTweetid(), tweet.getUserid(), tweet.getMessage());
     }
 }

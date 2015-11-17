@@ -52,19 +52,9 @@ public class FollowerDaoImpl implements FollowerDao
     }
 
     @Override
-    public boolean addFollower(String userid, String followerid)
+    public void addFollower(String userid, String followerid)
     {
-        boolean isFollowerAdded = true;
-        try
-        {
-            jdbcTemplate.update("INSERT INTO Followers (userid,followerid) VALUES (?, ?)",
-                    userid, followerid);
-        }
-        catch (Exception exp)
-        {
-            isFollowerAdded = false;
-            System.out.println("Exception: " + exp.getMessage());
-        }
-        return isFollowerAdded;
+        jdbcTemplate.update("INSERT INTO Followers (userid,followerid) VALUES (?, ?)",
+                userid, followerid);
     }
 }

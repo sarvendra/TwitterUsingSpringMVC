@@ -13,5 +13,5 @@ public interface FollowerDao
 
     public List<Follower> getFollowingList(String userid);
 
-    public boolean addFollower(String userid, String followerid);
+    public void addFollower(String userid, String followerid);
 }

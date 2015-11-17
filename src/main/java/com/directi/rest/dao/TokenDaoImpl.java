@@ -59,20 +59,10 @@ public class TokenDaoImpl implements TokenDao
     }
 
     @Override
-    public boolean deleteToken(String email)
+    public void deleteToken(String email)
     {
         String query = "delete from Tokens where email=?";
-        boolean isTokenDeleted = false;
-        try
-        {
-            jdbcTemplate.update(query,email);
-            isTokenDeleted = true;
-        }
-        catch (Exception exp)
-        {
-            System.out.println("Exception "+ exp.getMessage());
-        }
-        return isTokenDeleted;
+        jdbcTemplate.update(query,email);
     }
 
     private static final class TokenMapper implements RowMapper<Token> {

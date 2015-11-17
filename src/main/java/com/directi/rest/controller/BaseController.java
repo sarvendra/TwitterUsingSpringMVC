@@ -1,5 +1,8 @@
 package com.directi.rest.controller;
 
+import com.directi.rest.Exception.DuplicateUserException;
+import com.directi.rest.Exception.InvalidEntityException;
+import org.springframework.dao.DataAccessException;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -12,16 +15,29 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 
 public abstract class BaseController
 {
-    @ExceptionHandler(EmptyResultDataAccessException.class)
-    public ResponseEntity<String> handleServerException(EmptyResultDataAccessException e) {
-        String message = "Page not found";
-        return new ResponseEntity<String>(message, HttpStatus.NOT_FOUND);
+    @ExceptionHandler(CannotGetJdbcConnectionException.class)
+    public ResponseEntity<String> handleNoJdbcConnectionException(CannotGetJdbcConnectionException e)
+    {
+        String message = "Cannot connect to database";
+        return new ResponseEntity<String>(message, HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
-    @ExceptionHandler(CannotGetJdbcConnectionException.class)
-    public ResponseEntity<String> handleNoConnection(CannotGetJdbcConnectionException e) {
-        String message = "Unable to connect to the database. Is it running?";
-        return new ResponseEntity<String>(message, HttpStatus.INTERNAL_SERVER_ERROR);
+    @ExceptionHandler(DuplicateUserException.class)
+    public ResponseEntity<String> handleDuplicateUserException(DuplicateUserException e)
+    {
+        return new ResponseEntity<String>(e.getErrMessage(), e.getErrCode());
+    }
+
+    @ExceptionHandler(DataAccessException.class)
+    public ResponseEntity<String> handleCommonDatabaseException(DataAccessException e)
+    {
+        return new ResponseEntity<>("Internal database error", HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+
+    @ExceptionHandler(InvalidEntityException.class)
+    public ResponseEntity<String> handleInvalidEntityException(InvalidEntityException e)
+    {
+        return new ResponseEntity<String>(e.getErrMessage(), e.getErrCode());
     }
 }
 

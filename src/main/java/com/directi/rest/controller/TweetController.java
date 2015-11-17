@@ -4,6 +4,7 @@ import com.directi.rest.apimodel.PostTweetRequest;
 import com.directi.rest.apimodel.Tweets;
 import com.directi.rest.apimodel.UserContext;
 import com.directi.rest.service.TweetManager;
+import com.directi.rest.service.UserManager;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -22,6 +23,9 @@ public class TweetController extends BaseController
     @Autowired
     private TweetManager tweetManager;
 
+    @Autowired
+    private UserManager userManager;
+
     @RequestMapping(value = "/tweets", method = RequestMethod.GET)
     @ResponseBody
     public ResponseEntity<Tweets> getTweets()
@@ -38,6 +42,9 @@ public class TweetController extends BaseController
     public ResponseEntity<Tweets> getTweetsByUserid(@PathVariable String userid)
     {
         System.out.println(" *** Controller.getTweetsByUserid");
+
+        userManager.ValidateUser(userid);
+
         Tweets tweets = tweetManager.getTweetsByUserid(userid);
         return new ResponseEntity<>(tweets, HttpStatus.OK);
     }
@@ -47,17 +54,8 @@ public class TweetController extends BaseController
     public ResponseEntity<String> postTweet(@RequestBody PostTweetRequest tweetRequest)
     {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        UserContext user = (UserContext)authentication.getPrincipal();
-        boolean isTweetAdded = tweetManager.postTweet(user.getUserid(), tweetRequest.getMessage());
-        String message = "Unable to post tweet";
-        if (isTweetAdded)
-        {
-            message = "tweet posted";
-            return new ResponseEntity<>(message, HttpStatus.OK);
-        }
-        else
-        {
-            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
-        }
+        UserContext user = (UserContext) authentication.getPrincipal();
+        tweetManager.postTweet(user.getUserid(), tweetRequest.getMessage());
+        return new ResponseEntity<String>("tweet posted", HttpStatus.OK);
     }
 }

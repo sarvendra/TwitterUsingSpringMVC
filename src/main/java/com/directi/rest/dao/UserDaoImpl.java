@@ -30,7 +30,23 @@ public class UserDaoImpl implements UserDao
         }
         catch (Exception exp)
         {
-            System.out.println("Exception thrown in querying UserDao getUserByEmail");
+            System.out.println("Exception thrown in querying UserDao getUserByEmail" + exp.getMessage());
+        }
+        return user;
+    }
+
+    @Override
+    public User getUserByUserid(String userid)
+    {
+        String query = "select userid,name,email,password,role from Users where userid=?";
+        User user = null;
+        try
+        {
+            user = jdbcTemplate.queryForObject(query, new Object[]{userid}, new UserMapper());
+        }
+        catch (Exception exp)
+        {
+            System.out.println("Exception thrown in querying UserDao getUserByEmail" + exp.getMessage());
         }
         return user;
     }

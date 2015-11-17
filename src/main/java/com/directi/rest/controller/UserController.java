@@ -53,13 +53,13 @@ public class UserController extends BaseController
     {
         System.out.println(" *** Controller.login");
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        UserDetails userDetails = (UserContext)authentication.getPrincipal();
-        if (userDetails != null)
+        if (authentication == null)
         {
-            AuthenticationUserToken authenticationUserToken = tokenManager.getAuthenticationToken(userDetails.getUsername());
-            return new ResponseEntity<>(authenticationUserToken, HttpStatus.OK);
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
-        return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        UserDetails userDetails = (UserContext)authentication.getPrincipal();
+        AuthenticationUserToken authenticationUserToken = tokenManager.getAuthenticationToken(userDetails.getUsername());
+        return new ResponseEntity<>(authenticationUserToken, HttpStatus.OK);
     }
 
     @RequestMapping(value = "/logout", method = RequestMethod.GET)
@@ -67,18 +67,10 @@ public class UserController extends BaseController
     public ResponseEntity<String> logout()
     {
         System.out.println(" *** Controller.logout");
-        String logoutMessage = "logout is unsuccessful";
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         UserDetails userDetails = (UserContext)authentication.getPrincipal();
-        if (tokenManager.deleteToken(userDetails.getUsername()))
-        {
-            logoutMessage = "logout is successful";
-            return new ResponseEntity<>(logoutMessage, HttpStatus.OK);
-        }
-        else
-        {
-            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
-        }
+        tokenManager.deleteToken(userDetails.getUsername());
+        return new ResponseEntity<String>("logout is successful", HttpStatus.OK);
     }
 
     @RequestMapping(value = "/followers", method = RequestMethod.GET)
@@ -97,6 +89,8 @@ public class UserController extends BaseController
     public ResponseEntity<ArrayList<String>> getFollowersByUserid(@PathVariable String userid)
     {
         System.out.println(" *** Controller.getFollowers");
+        ValidateUser(userid);
+
         ArrayList<String> followers = followerManager.getFollowers(userid);
         return new ResponseEntity<>(followers, HttpStatus.OK);
     }
@@ -117,6 +111,8 @@ public class UserController extends BaseController
     public ResponseEntity<ArrayList<String>> getFollowingByUserid(@PathVariable String userid)
     {
         System.out.println(" *** Controller.getFollowingByUserid");
+        ValidateUser(userid);
+
         ArrayList<String> following = followerManager.getFollowing(userid);
         return new ResponseEntity(following, HttpStatus.OK);
     }
@@ -128,15 +124,16 @@ public class UserController extends BaseController
         System.out.println(" *** Controller.addFollowing");
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         UserContext user = (UserContext)authentication.getPrincipal();
-        String message = "Unable to follow";
-        if (followerManager.addFollower(followingid, user.getUserid()))
-        {
-            message = user.getUserid() + " following " + followingid;
-            return new ResponseEntity<>(message, HttpStatus.OK);
-        }
-        else
-        {
-            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
-        }
+
+        ValidateUser(followingid);
+
+        followerManager.addFollower(followingid, user.getUserid());
+        String message = user.getUserid() + " following " + followingid;
+        return new ResponseEntity<>(message, HttpStatus.OK);
+    }
+
+    private void ValidateUser(String userid)
+    {
+        userManager.ValidateUser(userid);
     }
 }

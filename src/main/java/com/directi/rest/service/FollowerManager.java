@@ -35,7 +35,7 @@ public class FollowerManager
     public ArrayList<String> getFollowing(String userid)
     {
         List<Follower> followingList = followerDao.getFollowingList(userid);
-        ArrayList<String> following = new ArrayList<String>();
+        ArrayList<String> following = new ArrayList<>();
         for(Follower follower: followingList)
         {
             following.add(follower.getUserid());
@@ -43,8 +43,8 @@ public class FollowerManager
         return following;
     }
 
-    public boolean addFollower(String userid, String followerid)
+    public void addFollower(String userid, String followerid)
     {
-        return followerDao.addFollower(userid,followerid);
+        followerDao.addFollower(userid,followerid);
     }
 }

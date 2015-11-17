@@ -27,9 +27,8 @@ public class TokenManager
         return authenticationUserToken;
     }
 
-    public boolean deleteToken(String email)
+    public void deleteToken(String email)
     {
-        boolean isTokenDeleted = tokenDao.deleteToken(email);
-        return isTokenDeleted;
+        tokenDao.deleteToken(email);
     }
 }

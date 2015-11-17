@@ -13,5 +13,5 @@ public interface TokenDao
 
     public Token getTokenByEmail(String email);
 
-    boolean deleteToken(String email);
+    void deleteToken(String email);
 }
