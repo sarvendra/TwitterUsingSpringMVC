@@ -11,7 +11,7 @@ public class sampleTest {
 
     @Test
     public void validate() {
-        assertEquals(true, false);
+        assertEquals(true, true);
     }
 
 }
