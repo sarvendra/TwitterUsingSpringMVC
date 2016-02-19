@@ -3,7 +3,7 @@
     <groupId>com.directi</groupId>
     <artifactId>TwitterUsingSpringMVC</artifactId>
     <packaging>war</packaging>
-    <version>1.0.8</version>
+    <version>1.0.9-SNAPSHOT</version>
     <name>TwitterUsingSpringMVC Maven Webapp</name>
     <url>http://maven.apache.org</url>
 
@@ -23,7 +23,7 @@
       	<url>https://github.com/sarvendra/TwitterUsingSpringMVC</url>
         <connection>scm:git:https://github.com/sarvendra/TwitterUsingSpringMVC.git</connection>
         <developerConnection>scm:git:https://github.com/sarvendra/TwitterUsingSpringMVC.git</developerConnection>
-    <tag>TwitterUsingSpringMVC-1.0.8</tag>
+    <tag>HEAD</tag>
   </scm>
 
     <dependencies>
