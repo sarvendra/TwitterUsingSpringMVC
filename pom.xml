@@ -22,7 +22,7 @@
     <scm>
       	<url>https://github.com/sarvendra/TwitterUsingSpringMVC</url>
         <connection>scm:git:https://github.com/sarvendra/TwitterUsingSpringMVC.git</connection>
-        <developerConnection>scm:git:https://github.com/sarvendra/TwitterUsingSpringMVC.git</developerConnection>
+        <!--<developerConnection>scm:git:https://github.com/sarvendra/TwitterUsingSpringMVC.git</developerConnection>-->
     <tag>HEAD</tag>
   </scm>
 
