@@ -22,8 +22,8 @@
     <scm>
       	<url>https://github.com/sarvendra/TwitterUsingSpringMVC</url>
         <connection>scm:git:https://github.com/sarvendra/TwitterUsingSpringMVC.git</connection>
-        <developerConnection>scm:git:https://github.com/sarvendra/TwitterUsingSpringMVC.git</developerConnection>
-    <tag>HEAD</tag>
+        <!--<developerConnection>scm:git:https://github.com/sarvendra/TwitterUsingSpringMVC.git</developerConnection>-->
+    <tag>TwitterUsingSpringMVC-1.0.10</tag>
   </scm>
 
     <dependencies>
